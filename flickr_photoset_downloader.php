@@ -107,7 +107,7 @@ class flickr_photoset_downloader{
 		$t = count($this->_hq_url_list);
 
 		foreach($this->_hq_url_list as $url){
-			$fp = fopen($this->grab_filename_from_url($url), 'w+');
+			$fp = fopen(basename($url), 'w+');
 
 			$ch = curl_init();
 			$timeout = 5;
@@ -125,20 +125,6 @@ class flickr_photoset_downloader{
 			}
 			$i++;
 		}
-	}
-
-	/**
-	 * Return the file name from a provided $url
-	 * 
-	 * URL structure should be absolute, e.g. 
-	 * http://farm6.staticflickr.com/5501/10210604666_dccaa4ac82_o.jpg
-	 * 
-	 * @param $url string
-	 * @return string
-	 */
-	private function grab_filename_from_url($url){
-		$a = explode('/',$url);
-		return $a[count($a)-1];
 	}
 }
 
