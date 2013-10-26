@@ -3,24 +3,35 @@ class flickr_photoset_downloader{
 
 	/**
 	 * the Photoset ID
+	 * 
+	 * @var string 
+	 * @access private
 	 */
 	private $_setid;
 
 	/**
-	 * The Flickr API key
+	 * The Flickr API key, default value is associated with the original 
+	 * project which is registered and tracked by Matthew Poer and Flickr at 
+	 * http://www.flickr.com/services/apps/72157636529341406/
+	 * 
+	 * @var string 
+	 * @access private 
 	 */
 	private $_api_key = '29e1ef5030d211e2dd2813572d947f8e';
 
 	/**
 	 * full list of the highest-available quality photos
+	 * 
+	 * @var array
+	 * @access private
 	 */
 	private $_hq_url_list = array();
 
 	/**
 	 * init
 	 * 
-	 * @param $url to the photoset
-	 * @param $api_key to use with the Flickr API
+	 * @param $url string to the photoset
+	 * @param $api_key mixed string|null to use with the Flickr API
 	 */
 	public function __construct($url,$api_key=null){
 		if($api_key) $this->_api_key = $api_key;
@@ -33,7 +44,7 @@ class flickr_photoset_downloader{
 	/**
 	 * parse the URL to find the Photoset's ID
 	 * 
-	 * @param $url
+	 * @param $url string
 	 * @throws Exception when URL is empty or malformed
 	 * @throws Exception when expected set format is not found
 	 */
@@ -110,10 +121,9 @@ class flickr_photoset_downloader{
 			$fp = fopen(basename($url), 'w+');
 
 			$ch = curl_init();
-			$timeout = 5;
 			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
 			curl_setopt($ch, CURLOPT_BINARYTRANSFER,1);
 			curl_setopt($ch, CURLOPT_FILE , $fp);
 			$data = curl_exec($ch);
@@ -145,10 +155,11 @@ class flickr_api_wrapper{
 	 * Parameters method and api_key are required. If format is not specified 
 	 * then json will be used. At least one additional parameter is required. 
 	 * 
-	 * @throws Exception
+	 * @throws Exception if missing 'method' parameter
+	 * @throws Exception if missing 'api_key' parameter
+	 * @throws Exception if missing additional parameter(s)
+	 * @throws Exception if Flickr reports an issue
 	 * @return mixed string, array, bool depending on API method
-	 * 
-	 * @author Matthew Poer (github.com/matthewpoer) <matthewpoer@gmail.com>
 	 */
 	public static function call(Array $p){
 
@@ -217,7 +228,7 @@ php -f flickr_photoset_downloader.php http://www.flickr.com/photos/someuser/sets
 where the first parameter is the URL to the photo set, and the second optional 
 parameter is the is the API Key you'd prefer to use. If you do not specify an 
 API key, the default will be used, 29e1ef5030d211e2dd2813572d947f8e, which is 
-registered and tracked at by Matthew Poer and Flickr at 
+registered and tracked by Matthew Poer and Flickr at 
 http://www.flickr.com/services/apps/72157636529341406/
 
 
