@@ -163,7 +163,7 @@ class flickr_api_wrapper{
 	 */
 	public static function call(Array $p){
 
-		$url = 'http://api.flickr.com/services/rest/';
+		$url = 'https://api.flickr.com/services/rest/';
 
 		if(empty($p['method'])){
 			throw new Exception('missing API method');
